@@ -1,4 +1,7 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
+import { GetCurrentUser, GetCurrentUserId } from 'src/decorators';
+import { AccessTokenGuard, RefreshTokenGuard } from 'src/guards';
+import { SuccessResponse } from 'src/utility/responses';
 import { AuthService } from './auth.service';
 import { SignupDto } from './dto';
 import { Token } from './entities';
@@ -11,23 +14,30 @@ export class AuthController {
     }
 
     @Post('/signup')
+    @HttpCode(HttpStatus.CREATED)
     signup(@Body() signupDto: SignupDto): Promise<Token> {
         return this.authService.signup(signupDto)
     }
 
     @Post('/signin')
+    @HttpCode(HttpStatus.OK)
     signin() {
 
     }
 
+    @UseGuards(AccessTokenGuard)
     @Post('/logout')
-    logout() {
-
+    @HttpCode(HttpStatus.OK)
+    async logout(@GetCurrentUserId() userId: number): Promise<SuccessResponse> {
+        await this.authService.logout(userId)
+        return SuccessResponse.put()
     }
 
+    @UseGuards(RefreshTokenGuard)
     @Post('/refresh')
-    refreshToken() {
-
+    @HttpCode(HttpStatus.OK)
+    refreshToken(@GetCurrentUserId() userId: number, @GetCurrentUser('refreshToken') refreshToken: string) {
+        return this.authService.refreshToken(userId, refreshToken)
     }
 
 }
