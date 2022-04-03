@@ -49,7 +49,7 @@ export class AuthService {
             }
         })
 
-        if (!user) throw new ForbiddenException("Access Denied")
+        if (!user || !user.refreshToken) throw new ForbiddenException("Access Denied")
 
         if (await bcrypt.compare(refreshToken, user.refreshToken)) {
             const tokens = await this.generateTokens(user.id, user.email)
