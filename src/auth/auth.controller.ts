@@ -1,5 +1,5 @@
 import { Body, Controller, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
-import { GetCurrentUser, GetCurrentUserId } from 'src/decorators';
+import { GetCurrentUser, GetCurrentUserId, Public } from 'src/decorators';
 import { AccessTokenGuard, RefreshTokenGuard } from 'src/guards';
 import { SuccessResponse } from 'src/utility/responses';
 import { AuthService } from './auth.service';
@@ -13,19 +13,20 @@ export class AuthController {
 
     }
 
+    @Public()
     @Post('/signup')
     @HttpCode(HttpStatus.CREATED)
     signup(@Body() signupDto: SignupDto): Promise<Token> {
         return this.authService.signup(signupDto)
     }
 
+    @Public()
     @Post('/signin')
     @HttpCode(HttpStatus.OK)
     signin() {
 
     }
 
-    @UseGuards(AccessTokenGuard)
     @Post('/logout')
     @HttpCode(HttpStatus.OK)
     async logout(@GetCurrentUserId() userId: number): Promise<SuccessResponse> {
@@ -33,6 +34,7 @@ export class AuthController {
         return SuccessResponse.put()
     }
 
+    @Public()
     @UseGuards(RefreshTokenGuard)
     @Post('/refresh')
     @HttpCode(HttpStatus.OK)
