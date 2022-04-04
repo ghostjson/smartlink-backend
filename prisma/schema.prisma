@@ -19,6 +19,8 @@ model User {
   password     String
   refreshToken String?
 
+  forms Form[]
+
   @@map("users")
 }
 
@@ -34,7 +36,9 @@ model Form {
   questions Question[]
   reward    Reward?    @relation(fields: [rewardId], references: [id])
 
-  rewardId Int? @unique
+  rewardId Int?  @unique
+  User     User? @relation(fields: [userId], references: [id])
+  userId   Int?
   @@map("forms")
 }
 

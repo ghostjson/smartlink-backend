@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
-    constructor(){
+    constructor() {
         super({
             datasources: {
                 db: {
@@ -14,10 +14,10 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
     }
 
     async onModuleInit() {
-        await this.$connect() 
+        await this.$connect()
     }
 
     async onModuleDestroy() {
-       await this.$disconnect() 
+        await this.$disconnect()
     }
 }
