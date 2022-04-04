@@ -19,7 +19,8 @@ model User {
   password     String
   refreshToken String?
 
-  forms Form[]
+  forms   Form[]
+  rewards Reward[]
 
   @@map("users")
 }
@@ -65,12 +66,14 @@ model Reward {
 
   name    String
   type    String
-  content String
+  content Json
 
   validity DateTime
 
   style Json
 
-  Form Form?
+  Form   Form?
+  User   User? @relation(fields: [userId], references: [id])
+  userId Int?
   @@map("rewards")
 }
