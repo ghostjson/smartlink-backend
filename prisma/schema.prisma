@@ -10,14 +10,63 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User{
-  id Int @id @default(autoincrement())
+model User {
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  email String @unique
-  password String
+  email        String  @unique
+  password     String
   refreshToken String?
 
   @@map("users")
+}
+
+model Form {
+
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  type     String
+  validity DateTime
+
+  questions Question[]
+  reward    Reward?    @relation(fields: [rewardId], references: [id])
+
+  rewardId Int? @unique
+  @@map("forms")
+}
+
+model Question {
+
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  question String
+  type     String
+  content  Json
+
+  Form   Form? @relation(fields: [formId], references: [id])
+  formId Int?
+  @@map("questions")
+}
+
+model Reward {
+
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name    String
+  type    String
+  content String
+
+  validity DateTime
+
+  style Json
+
+  Form Form?
+  @@map("rewards")
 }
