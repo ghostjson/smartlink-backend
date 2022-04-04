@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { SignupDto } from './dto';
+import { SigninDto, SignupDto } from './dto';
 import { Token } from './entities';
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt';
@@ -24,8 +24,16 @@ export class AuthService {
         return tokens
     }
 
-    signin() {
+    async signin(signinDto: SigninDto): Promise<Token> {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                email: signinDto.email
+            }
+        })
 
+        const tokens = await this.generateTokens(user.id, user.email)
+        await this.updateRefreshTokenHash(user.id, tokens.refreshToken)
+        return tokens
     }
 
     async logout(userId: number) {
@@ -82,7 +90,7 @@ export class AuthService {
             this.jwtService.signAsync({
                 sub: userId,
                 email
-            }, { secret: 'at-secret', expiresIn: 60 * 15 }), // 15 minutes
+            }, { secret: 'at-secret', expiresIn: 60 * 60 * 7 }), // one week
             this.jwtService.signAsync({
                 sub: userId,
                 email

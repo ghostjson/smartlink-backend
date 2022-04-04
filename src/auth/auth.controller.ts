@@ -1,12 +1,12 @@
 import { Body, Controller, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
 import { GetCurrentUser, GetCurrentUserId, Public } from 'src/decorators';
-import { AccessTokenGuard, RefreshTokenGuard } from 'src/guards';
+import { RefreshTokenGuard } from 'src/guards';
 import { SuccessResponse } from 'src/utility/responses';
 import { AuthService } from './auth.service';
-import { SignupDto } from './dto';
+import { SigninDto, SignupDto } from './dto';
 import { Token } from './entities';
 
-@Controller('auth')
+@Controller('api/v1/auth')
 export class AuthController {
 
     constructor(private authService: AuthService) {
@@ -23,8 +23,8 @@ export class AuthController {
     @Public()
     @Post('/signin')
     @HttpCode(HttpStatus.OK)
-    signin() {
-
+    signin(@Body() signinDto: SigninDto): Promise<Token> {
+        return this.authService.signin(signinDto)
     }
 
     @Post('/logout')
