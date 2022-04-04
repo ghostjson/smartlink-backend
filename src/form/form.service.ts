@@ -14,7 +14,11 @@ export class FormService {
                 id: userId
             },
             include: {
-                forms: true
+                forms: {
+                    include: {
+                        questions: true
+                    }
+                }
             }
         })
 
