@@ -3,11 +3,22 @@ import { Question } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateQuestionDto } from './dto';
 
+/**
+ * QuestionService
+ * 
+ * Service responsible for handling all business logic related to questions 
+ */
 @Injectable()
 export class QuestionService {
 
     constructor(private prisma: PrismaService) { }
 
+    /**
+     * Create a new question for a form
+     * @param userId user id of the user
+     * @param createQuestionDto CreateQuestionDto
+     * @returns reutrn newly created question
+     */
     async createQuestion(userId: number, createQuestionDto: CreateQuestionDto): Promise<Question> {
         const formExists = await this.prisma.form.count({
             where: {
@@ -16,7 +27,8 @@ export class QuestionService {
             }
         })
 
-        if (formExists > 0) {
+        // check if the form exists
+        if (formExists > 0) { // if exists add question to the form
             const question = await this.prisma.question.create({
                 data: {
                     question: createQuestionDto.question,
@@ -27,11 +39,18 @@ export class QuestionService {
             })
 
             return question
-        } else {
+        } else { // otherwise raise not found exception
             throw new NotFoundException('Given form is not existed')
         }
     }
 
+    /**
+     * Delete a question
+     * 
+     * @param userId user id of the user
+     * @param questionId quetsion id of the question to be deleted
+     * @returns returns true if delted successfully
+     */
     async deleteQuestion(userId: number, questionId: number): Promise<Boolean> {
         const question = await this.prisma.question.findUnique({
             where: {
@@ -39,16 +58,20 @@ export class QuestionService {
             },
         })
 
-        if (question === null) {
+        // if there is no question exists with this question id
+        if (question === null) { // then throw not found exception
             throw new NotFoundException('Not Found')
         }
+
+        // query the form to which the question part of
         const parentForm = await this.prisma.form.findUnique({
             where: {
                 id: question.formId
             }
         })
 
-        if (parentForm.userId === userId) {
+        // if the ownership of the form is same as the given user
+        if (parentForm.userId === userId) { // delete the question
             await this.prisma.question.delete({
                 where: {
                     id: questionId
@@ -56,7 +79,7 @@ export class QuestionService {
             })
 
             return true
-        } else {
+        } else { // otherwise raise BadRequestException
             throw new BadRequestException('No question is associated with question id')
         }
 

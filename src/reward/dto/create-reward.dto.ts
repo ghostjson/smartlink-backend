@@ -1,6 +1,8 @@
 import { IsDate, IsNotEmpty, IsObject, IsString } from "class-validator";
 
-
+/**
+ * CreateRewardDto
+ */
 export class CreateRewardDto {
 
     @IsString()

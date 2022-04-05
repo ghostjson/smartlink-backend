@@ -1,6 +1,8 @@
 import { IsNotEmpty, isNotEmpty, IsNumber, IsObject, IsString, isString } from "class-validator";
 
-
+/**
+ * CreateQuestionDto
+ */
 export class CreateQuestionDto {
 
     @IsString()

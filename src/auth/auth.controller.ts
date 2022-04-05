@@ -6,13 +6,22 @@ import { AuthService } from './auth.service';
 import { SigninDto, SignupDto } from './dto';
 import { Token } from './entities';
 
+/**
+ * Authentication controller
+ * 
+ * handles all logic related to authentication and authorization
+ */
 @Controller('api/v1/auth')
 export class AuthController {
 
-    constructor(private authService: AuthService) {
+    constructor(private authService: AuthService) { }
 
-    }
-
+    /**
+     * Signup controller
+     * 
+     * @param signupDto Signup DTO
+     * @returns returns a Token object
+     */
     @Public()
     @Post('/signup')
     @HttpCode(HttpStatus.CREATED)
@@ -20,6 +29,12 @@ export class AuthController {
         return this.authService.signup(signupDto)
     }
 
+    /**
+     * Signup controller
+     * 
+     * @param signinDto Signin DTO
+     * @returns returns a Token object
+     */
     @Public()
     @Post('/signin')
     @HttpCode(HttpStatus.OK)
@@ -27,6 +42,12 @@ export class AuthController {
         return this.authService.signin(signinDto)
     }
 
+    /**
+     * Logout controller
+     * 
+     * @param userId Id of the authorized user
+     * @returns SuccessResponse object
+     */
     @Post('/logout')
     @HttpCode(HttpStatus.OK)
     async logout(@GetCurrentUserId() userId: number): Promise<SuccessResponse> {
@@ -34,6 +55,16 @@ export class AuthController {
         return SuccessResponse.put()
     }
 
+    /**
+     * Refresh token
+     * @deprecated
+     * 
+     * TODO: Is not working, should be fixed.
+     * 
+     * @param userId Id of the authorized user
+     * @param refreshToken refresh token of the authorized user
+     * @returns return new pair of tokens
+     */
     @Public()
     @UseGuards(RefreshTokenGuard)
     @Post('/refresh')

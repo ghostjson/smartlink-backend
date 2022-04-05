@@ -5,12 +5,24 @@ import { Token } from './entities';
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt';
 
+/**
+ * AuthService
+ * 
+ * Handles all logic related to authentication and authorization
+ */
 @Injectable()
 export class AuthService {
 
     constructor(private prisma: PrismaService, private jwtService: JwtService) { }
 
 
+    /**
+     * signup
+     * 
+     * used to create a new user, generate and return new pair of tokens
+     * @param signupDto SignupDto object
+     * @returns Token object
+     */
     async signup(signupDto: SignupDto): Promise<Token> {
         const user = await this.prisma.user.create({
             data: {
@@ -24,6 +36,13 @@ export class AuthService {
         return tokens
     }
 
+    /**
+     * Signin
+     * 
+     * used to generate tokens from given credentials
+     * @param signinDto Signin DTO
+     * @returns Token object
+     */
     async signin(signinDto: SigninDto): Promise<Token> {
         const user = await this.prisma.user.findUnique({
             where: {
@@ -42,6 +61,12 @@ export class AuthService {
 
     }
 
+    /**
+     * Logout
+     * 
+     * logout user
+     * @param userId User ID of user to be logout
+     */
     async logout(userId: number) {
         await this.prisma.user.updateMany({
             where: {
@@ -56,6 +81,14 @@ export class AuthService {
         })
     }
 
+    /**
+     * Refresh token
+     * 
+     * Refresh the current access token
+     * @param userId User ID of the user
+     * @param refreshToken Refresh token of the user
+     * @returns returns new set of tokens
+     */
     async refreshToken(userId: number, refreshToken: string) {
         const user = await this.prisma.user.findUnique({
             where: {
@@ -73,9 +106,15 @@ export class AuthService {
     }
 
 
+    /**
+     * Update Refresh Token
+     * 
+     * Function to update the refresh token on the database of the given user
+     * @param userId User Id of the user to which the accesstoken to be refreshed
+     * @param refreshToken current refresh token of the user
+     */
     private async updateRefreshTokenHash(userId: number, refreshToken: string) {
         const hashedRefreshToken = await this.generateHash(refreshToken)
-        console.log(hashedRefreshToken)
         await this.prisma.user.update({
             where: {
                 id: userId
@@ -87,10 +126,25 @@ export class AuthService {
     }
 
 
+    /**
+     * Generate hash
+     * 
+     * Generate hash from the given data
+     * @param data data to be hashed
+     * @returns return hashed version of the data
+     */
     private async generateHash(data: string): Promise<string> {
         return bcrypt.hash(data, 10)
     }
 
+    /**
+     * Generate tokens
+     * 
+     * Genreate and returns access token and refresh token for a given user
+     * @param userId Id of the user
+     * @param phone Phone number of the user
+     * @returns returns tokens
+     */
     private async generateTokens(userId: number, phone: string) {
         const [accessToken, refreshToken] = await Promise.all([
             this.jwtService.signAsync({
