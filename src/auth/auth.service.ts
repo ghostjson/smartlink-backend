@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SigninDto, SignupDto } from './dto';
 import { Token } from './entities';
@@ -14,12 +14,12 @@ export class AuthService {
     async signup(signupDto: SignupDto): Promise<Token> {
         const user = await this.prisma.user.create({
             data: {
-                email: signupDto.email,
+                phone: signupDto.phone,
                 password: await this.generateHash(signupDto.password)
             }
         })
 
-        const tokens = await this.generateTokens(user.id, user.email)
+        const tokens = await this.generateTokens(user.id, user.phone)
         await this.updateRefreshTokenHash(user.id, tokens.refreshToken)
         return tokens
     }
@@ -27,13 +27,19 @@ export class AuthService {
     async signin(signinDto: SigninDto): Promise<Token> {
         const user = await this.prisma.user.findUnique({
             where: {
-                email: signinDto.email
+                phone: signinDto.phone,
             }
         })
 
-        const tokens = await this.generateTokens(user.id, user.email)
-        await this.updateRefreshTokenHash(user.id, tokens.refreshToken)
-        return tokens
+        if (bcrypt.compare(signinDto.password, user.password)) {
+            const tokens = await this.generateTokens(user.id, user.phone)
+            await this.updateRefreshTokenHash(user.id, tokens.refreshToken)
+            return tokens
+        } else {
+            throw new UnauthorizedException('Incorrect credentials')
+        }
+
+
     }
 
     async logout(userId: number) {
@@ -60,7 +66,7 @@ export class AuthService {
         if (!user || !user.refreshToken) throw new ForbiddenException("Access Denied")
 
         if (await bcrypt.compare(refreshToken, user.refreshToken)) {
-            const tokens = await this.generateTokens(user.id, user.email)
+            const tokens = await this.generateTokens(user.id, user.phone)
             await this.updateRefreshTokenHash(user.id, tokens.refreshToken)
             return tokens
         }
@@ -85,15 +91,15 @@ export class AuthService {
         return bcrypt.hash(data, 10)
     }
 
-    private async generateTokens(userId: number, email: string) {
+    private async generateTokens(userId: number, phone: string) {
         const [accessToken, refreshToken] = await Promise.all([
             this.jwtService.signAsync({
                 sub: userId,
-                email
+                phone
             }, { secret: 'at-secret', expiresIn: 60 * 60 * 7 }), // one week
             this.jwtService.signAsync({
                 sub: userId,
-                email
+                phone
             }, { secret: 'rf-secret', expiresIn: 60 * 60 * 7 }) // one week
 
         ])
