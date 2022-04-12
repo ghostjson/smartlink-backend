@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
+import { Form } from '@prisma/client';
 import { GetCurrentUserId } from 'src/decorators';
 import { SuccessResponse } from 'src/utility/responses';
 import { CreateFormDto } from './dto';
@@ -39,7 +40,7 @@ export class FormController {
     }
 
     /**
-     * Deleta an existing form
+     * Delete an existing form
      * @param userId user id of the user
      * @param formId form id of the form which to be deleted
      * @returns SuccessResponse object
@@ -49,6 +50,19 @@ export class FormController {
     async deleteForm(@GetCurrentUserId() userId: number, @Param('formId') formId: number): Promise<SuccessResponse> {
         await this.formService.deleteFormByUserId(userId, Number(formId))
         return SuccessResponse.put()
+    }
+
+    /**
+     * Associate a form with an existing reward
+     * @param userId id of the user
+     * @param formId id of the form
+     * @param rewardId id of the reward
+     * @returns returns a form object
+     */
+    @Patch('/:formId/:rewardId')
+    async associateReward(@GetCurrentUserId() userId: string, @Param('formId') formId: string, @Param('rewardId') rewardId: string): Promise<Form> {
+        const form: Form = await this.formService.associateReward(Number(userId), Number(formId), Number(rewardId))
+        return form
     }
 
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Form } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateFormDto } from './dto';
@@ -68,6 +68,44 @@ export class FormService {
         })
 
         return true
+    }
+
+    /**
+     * Associate a form with an existing reward
+     * @param userId id of the user
+     * @param formId id of the form
+     * @param rewardId id of the reward
+     * @returns returns a form object
+     */
+    async associateReward(userId: number, formId: number, rewardId: number): Promise<Form> {
+
+        const formExists = await this.prisma.form.count({ // returns no of form records
+            where: {
+                userId,
+                id: formId
+            }
+        })
+
+        const rewardExists = await this.prisma.reward.count({ // returns no of reward records
+            where: {
+                userId,
+                id: rewardId
+            }
+        })
+
+        if (formExists === 0 || rewardExists === 0) { // returns false if there is no record exists for this user
+            throw new BadRequestException('Given Form or Reward for the given user does not exists')
+        }
+
+        const form = await this.prisma.form.update({
+            where: {
+                id: formId
+            },
+            data: { rewardId }
+        })
+
+        return form
+
     }
 
 }
