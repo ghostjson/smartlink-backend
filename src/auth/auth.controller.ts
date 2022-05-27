@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, ConflictException, Controller, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
 import { GetCurrentUser, GetCurrentUserId, Public } from 'src/decorators';
 import { RefreshTokenGuard } from 'src/guards';
 import { SuccessResponse } from 'src/utility/responses';
@@ -25,7 +25,12 @@ export class AuthController {
     @Public()
     @Post('/signup')
     @HttpCode(HttpStatus.CREATED)
-    signup(@Body() signupDto: SignupDto): Promise<Token> {
+    async signup(@Body() signupDto: SignupDto): Promise<Token> {
+
+        if(await this.authService.isUserExists(signupDto.phone)){
+            throw new ConflictException("User already exists")
+        }
+
         return this.authService.signup(signupDto)
     }
 

@@ -105,6 +105,24 @@ export class AuthService {
         }
     }
 
+   
+    /**
+     * Is User Exists
+     * 
+     * Function to check if the user already exists in the database with given phone number
+     * @param phoneNumber phone number of the user
+     * @returns true if user exists with this phone number otherwise return false
+     */
+    async isUserExists(phoneNumber: string): Promise<Boolean>{
+        const userExist = await this.prisma.user.count({
+            where: {
+                phone: phoneNumber
+            }
+        })
+
+        return (userExist > 0)
+    }
+
 
     /**
      * Update Refresh Token
