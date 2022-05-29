@@ -1,8 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { Question } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateQuestionDto } from './dto';
-import { CreateManyQuestionsDto } from './dto/create-many-questions.dto';
+import { CreateManyQuestionsDto, CreateQuestionDto } from './dto';
 
 /**
  * QuestionService
@@ -46,14 +45,29 @@ export class QuestionService {
     }
 
 
+    /**
+     * Create a batch of questions for a given form
+     * 
+     * @param userId user id of the user
+     * @param createManyQuestionsDto CreateManyQuestionDto
+     * @returns a prisma batch which contain count of records inserted
+     */
     async createManyQuestions(userId: number, createManyQuestionsDto: CreateManyQuestionsDto): Promise<any> {
+
+        // get the form from the database
         const formExists = await this.prisma.form.count({
             where: {
-                id: createManyQuestionsDto.questions[0].formId,
+                id: createManyQuestionsDto.formId,
                 userId: userId
             }
         })
-        
+       
+        // updating form id
+        for(let i=0;i<createManyQuestionsDto.questions.length;i++){
+            createManyQuestionsDto.questions[i].formId = createManyQuestionsDto.formId
+        }
+
+        // check if the form exists
         if (formExists > 0) {
             const questions = await this.prisma.question.createMany({
                 data: createManyQuestionsDto.questions,
