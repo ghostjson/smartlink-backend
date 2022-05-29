@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, NotFoundException, UnauthorizedExcepti
 import { Question } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateQuestionDto } from './dto';
+import { CreateManyQuestionsDto } from './dto/create-many-questions.dto';
 
 /**
  * QuestionService
@@ -42,6 +43,28 @@ export class QuestionService {
         } else { // otherwise raise not found exception
             throw new NotFoundException('Given form is not existed')
         }
+    }
+
+
+    async createManyQuestions(userId: number, createManyQuestionsDto: CreateManyQuestionsDto): Promise<any> {
+        const formExists = await this.prisma.form.count({
+            where: {
+                id: createManyQuestionsDto.questions[0].formId,
+                userId: userId
+            }
+        })
+        
+        if (formExists > 0) {
+            const questions = await this.prisma.question.createMany({
+                data: createManyQuestionsDto.questions,
+                skipDuplicates: true
+            })
+
+            return questions
+        }else{
+            throw new NotFoundException('Given form is not existed')
+        }
+
     }
 
     /**

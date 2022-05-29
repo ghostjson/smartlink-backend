@@ -3,6 +3,7 @@ import { Question } from '@prisma/client';
 import { GetCurrentUserId } from 'src/decorators';
 import { SuccessResponse } from 'src/utility/responses';
 import { CreateQuestionDto } from './dto';
+import { CreateManyQuestionsDto } from './dto/create-many-questions.dto';
 import { QuestionService } from './question.service';
 
 /**
@@ -24,7 +25,13 @@ export class QuestionController {
     @Post('/')
     @HttpCode(HttpStatus.CREATED)
     async createQuestion(@GetCurrentUserId() userId: number, @Body() createQuestionDto: CreateQuestionDto): Promise<Question> {
-        return await this.questionService.createQuestion(userId, createQuestionDto)
+        return await this.questionService.createQuestion(userId, createQuestionDto);
+    }
+
+    @Post('/many')
+    @HttpCode(HttpStatus.CREATED)
+    async createManyQuestions(@GetCurrentUserId() userId: number, @Body() createManyQuestionsDto: CreateManyQuestionsDto): Promise<any> {
+       return await this.questionService.createManyQuestions(userId, createManyQuestionsDto);
     }
 
     /**
