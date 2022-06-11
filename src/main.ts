@@ -7,6 +7,8 @@ import { AccessTokenGuard } from './guards';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors()
+
   // validation configuration
   app.useGlobalPipes(new ValidationPipe())
 
