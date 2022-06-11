@@ -37,6 +37,7 @@ model Form {
 
   type     String
   validity DateTime
+  style    Json
 
   questions Question[]
   reward    Reward?    @relation(fields: [rewardId], references: [id])

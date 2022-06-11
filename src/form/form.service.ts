@@ -46,6 +46,7 @@ export class FormService {
             data: {
                 type: createFormDto.type,
                 validity: createFormDto.validity,
+                style: createFormDto.style,
                 userId: userId
             }
         })

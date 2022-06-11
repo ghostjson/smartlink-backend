@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsObject, IsString } from "class-validator";
 
 /**
  * CreateFormDto
@@ -11,5 +11,8 @@ export class CreateFormDto {
 
     @IsNotEmpty()
     validity: Date;
+
+    @IsObject()
+    style: object;
 
 }
