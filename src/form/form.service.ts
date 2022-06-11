@@ -47,7 +47,8 @@ export class FormService {
                 type: createFormDto.type,
                 validity: createFormDto.validity,
                 style: createFormDto.style,
-                userId: userId
+                name: createFormDto.name,
+                userId: userId,
             }
         })
 
