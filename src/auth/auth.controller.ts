@@ -4,6 +4,7 @@ import { RefreshTokenGuard } from 'src/guards';
 import { SuccessResponse } from 'src/utility/responses';
 import { AuthService } from './auth.service';
 import { SigninDto, SignupDto } from './dto';
+import { FacebookSigninDto } from './dto/facebook-signin.dto';
 import { Token } from './entities';
 
 /**
@@ -45,6 +46,19 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     signin(@Body() signinDto: SigninDto): Promise<Token> {
         return this.authService.signin(signinDto)
+    }
+
+    /**
+     * Facebook signin controller
+     * 
+     * @param facebookSigninDto FacebookSigninDto
+     * @returns returns a Token object
+     */
+    @Public()
+    @Post('/facebook')
+    @HttpCode(HttpStatus.OK)
+    signinUsingFacebook(@Body() facebookSigninDto: FacebookSigninDto): Promise<Token> {
+        return this.authService.signinUsingFacebook(facebookSigninDto)
     }
 
     /**

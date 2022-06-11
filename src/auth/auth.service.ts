@@ -4,6 +4,8 @@ import { SigninDto, SignupDto } from './dto';
 import { Token } from './entities';
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt';
+import { FacebookSigninDto } from './dto/facebook-signin.dto';
+import axios from 'axios';
 
 /**
  * AuthService
@@ -22,18 +24,21 @@ export class AuthService {
      * used to create a new user, generate and return new pair of tokens
      * @param signupDto SignupDto object
      * @returns Token object
+     * @deprecated
      */
     async signup(signupDto: SignupDto): Promise<Token> {
-        const user = await this.prisma.user.create({
-            data: {
-                phone: signupDto.phone,
-                password: await this.generateHash(signupDto.password)
-            }
-        })
+        // const user = await this.prisma.user.create({
+        //     data: {
+        //         phone: signupDto.phone,
+        //         password: await this.generateHash(signupDto.password)
+        //     }
+        // })
 
-        const tokens = await this.generateTokens(user.id, user.phone)
-        await this.updateRefreshTokenHash(user.id, tokens.refreshToken)
-        return tokens
+        // const tokens = await this.generateTokens(user.id, user.phone)
+        // await this.updateRefreshTokenHash(user.id, tokens.refreshToken)
+        // return tokens
+
+        return null
     }
 
     /**
@@ -42,24 +47,64 @@ export class AuthService {
      * used to generate tokens from given credentials
      * @param signinDto Signin DTO
      * @returns Token object
+     * @deprecated
      */
     async signin(signinDto: SigninDto): Promise<Token> {
-        const user = await this.prisma.user.findUnique({
-            where: {
-                phone: signinDto.phone,
-            }
-        })
+        // const user = await this.prisma.user.findUnique({
+        //     where: {
+        //         phone: signinDto.phone,
+        //     }
+        // })
 
-        if (bcrypt.compare(signinDto.password, user.password)) {
-            const tokens = await this.generateTokens(user.id, user.phone)
-            await this.updateRefreshTokenHash(user.id, tokens.refreshToken)
-            return tokens
-        } else {
-            throw new UnauthorizedException('Incorrect credentials')
-        }
-
+        // if (bcrypt.compare(signinDto.password, user.password)) {
+        //     const tokens = await this.generateTokens(user.id, user.phone)
+        //     await this.updateRefreshTokenHash(user.id, tokens.refreshToken)
+        //     return tokens
+        // } else {
+        //     throw new UnauthorizedException('Incorrect credentials')
+        // }
+        return null
 
     }
+
+    /**
+     * Signin using facebook access token
+     * @param facebookSigninDto 
+     */
+    async signinUsingFacebook(facebookSigninDto: FacebookSigninDto): Promise<Token> {
+        const fbToken = facebookSigninDto.accessToken
+        const response = await axios.post(`https://graph.facebook.com/me?fields=name,picture&access_token=${fbToken}`)
+        let user = null
+        console.log(response);
+       
+        // check if the user already exists
+        if(await this.isUserExists(response.data.id)){
+
+            // if exist query it from the database
+            user = await this.prisma.user.findUnique({
+                where: {
+                    facebookId: response.data.id
+                }
+            })
+
+        }else {
+
+            // if not exist, create a new user
+            user = await this.prisma.user.create({
+                data: {
+                    name: response.data.name,
+                    facebookId: response.data.id,
+                    profile: response.data.picture.data.url
+                }
+            })
+
+        }
+
+        const token = await this.generateTokens(user.id, user.facebookId)
+        return token
+    }
+
+
 
     /**
      * Logout
@@ -88,6 +133,7 @@ export class AuthService {
      * @param userId User ID of the user
      * @param refreshToken Refresh token of the user
      * @returns returns new set of tokens
+     * @deprecated
      */
     async refreshToken(userId: number, refreshToken: string) {
         const user = await this.prisma.user.findUnique({
@@ -99,9 +145,10 @@ export class AuthService {
         if (!user || !user.refreshToken) throw new ForbiddenException("Access Denied")
 
         if (await bcrypt.compare(refreshToken, user.refreshToken)) {
-            const tokens = await this.generateTokens(user.id, user.phone)
-            await this.updateRefreshTokenHash(user.id, tokens.refreshToken)
-            return tokens
+            // const tokens = await this.generateTokens(user.id, user.phone)
+            // await this.updateRefreshTokenHash(user.id, tokens.refreshToken)
+            // return tokens
+            return null
         }
     }
 
@@ -113,12 +160,12 @@ export class AuthService {
      * @param phoneNumber phone number of the user
      * @returns true if user exists with this phone number otherwise return false
      */
-    async isUserExists(phoneNumber: string): Promise<Boolean>{
+    async isUserExists(facebookId: string): Promise<Boolean>{
         const userExist = await this.prisma.user.count({
             where: {
-                phone: phoneNumber
+                facebookId: facebookId
             }
-        })
+        })        
 
         return (userExist > 0)
     }
@@ -160,18 +207,18 @@ export class AuthService {
      * 
      * Genreate and returns access token and refresh token for a given user
      * @param userId Id of the user
-     * @param phone Phone number of the user
+     * @param facebookId facebook id of the user
      * @returns returns tokens
      */
-    private async generateTokens(userId: number, phone: string) {
+    private async generateTokens(userId: number, facebookId: string) {
         const [accessToken, refreshToken] = await Promise.all([
             this.jwtService.signAsync({
                 sub: userId,
-                phone
+                facebookId
             }, { secret: 'at-secret', expiresIn: 60 * 60 * 7 }), // one week
             this.jwtService.signAsync({
                 sub: userId,
-                phone
+                facebookId
             }, { secret: 'rf-secret', expiresIn: 60 * 60 * 7 }) // one week
 
         ])

@@ -15,8 +15,12 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  phone        String  @unique
-  password     String
+  // phone        String  @unique
+  // password     String
+  name       String?
+  profile    String?
+  facebookId String? @unique
+
   refreshToken String?
 
   forms   Form[]
