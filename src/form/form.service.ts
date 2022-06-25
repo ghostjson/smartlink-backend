@@ -49,6 +49,7 @@ export class FormService {
                 style: createFormDto.style,
                 name: createFormDto.name,
                 userId: userId,
+                metaData: createFormDto.metaData
             }
         })
 

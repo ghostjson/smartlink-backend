@@ -18,4 +18,7 @@ export class CreateFormDto {
     @IsString()
     name: string;
 
+    @IsObject()
+    metaData: object;
+
 }
