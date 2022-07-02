@@ -69,6 +69,9 @@ export class FormService {
             where: {
                 id: formId,
             },
+            include: {
+                questions: true,
+            },
         });
 
         return form;
