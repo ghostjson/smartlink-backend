@@ -1,1 +1,1 @@
-export * from './create-reward.dto'
+export * from './create-reward.dto';

@@ -1,1 +1,1 @@
-export * from './success.response'
+export * from './success.response';

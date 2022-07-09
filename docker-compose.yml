@@ -1,19 +1,16 @@
 version: '3.8'
 
 services:
-  backend:
-    build: .
-    ports:
-      - 3000:3000
-    environment:
-      DATABASE_URL: postgresql://postgres:password@database:5432/smarklink-dev?schema=public
-  database:
-    image: postgres
-    restart: always
-    ports:
-      - 5432:5432
-    environment:
-      POSTGRES_PASSWORD: password
-    
-
-
+    backend:
+        build: .
+        ports:
+            - 3000:3000
+        environment:
+            DATABASE_URL: postgresql://postgres:password@database:5432/smarklink-dev?schema=public
+    database:
+        image: postgres
+        restart: always
+        ports:
+            - 5432:5432
+        environment:
+            POSTGRES_PASSWORD: password

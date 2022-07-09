@@ -36,48 +36,42 @@ $ npm run test:cov
 
 ## Endpoints
 
-* [Authorization](#authorization)
+-   [Authorization](#authorization)
     1. [Signup](#1-signup)
-        * [Signup success response](#i-example-request-signup-success-response)
+        - [Signup success response](#i-example-request-signup-success-response)
     1. [Signin](#2-signin)
-        * [Signin](#i-example-request-signin)
+        - [Signin](#i-example-request-signin)
     1. [Logout](#3-logout)
-        * [Logout](#i-example-request-logout)
+        - [Logout](#i-example-request-logout)
     1. [Refresh token](#4-refresh-token)
-        * [Signin](#i-example-request-signin-1)
-* [Forms](#forms)
+        - [Signin](#i-example-request-signin-1)
+-   [Forms](#forms)
     1. [Create form](#1-create-form)
-        * [Create form](#i-example-request-create-form)
+        - [Create form](#i-example-request-create-form)
     1. [List all forms](#2-list-all-forms)
-        * [List all forms](#i-example-request-list-all-forms)
+        - [List all forms](#i-example-request-list-all-forms)
     1. [Delete form](#3-delete-form)
-        * [Delete form](#i-example-request-delete-form)
+        - [Delete form](#i-example-request-delete-form)
     1. [Associate a reward with form](#4-associate-a-reward-with-form)
-        * [Associate a reward with form](#i-example-request-associate-a-reward-with-form)
-* [Questions](#questions)
+        - [Associate a reward with form](#i-example-request-associate-a-reward-with-form)
+-   [Questions](#questions)
     1. [Create question](#1-create-question)
-        * [Create question](#i-example-request-create-question)
+        - [Create question](#i-example-request-create-question)
     1. [Delete Question](#2-delete-question)
-        * [Delete Question](#i-example-request-delete-question)
-* [Rewards](#rewards)
+        - [Delete Question](#i-example-request-delete-question)
+-   [Rewards](#rewards)
     1. [Get all rewards](#1-get-all-rewards)
-        * [Get all rewards](#i-example-request-get-all-rewards)
+        - [Get all rewards](#i-example-request-get-all-rewards)
     1. [Create reward](#2-create-reward)
-        * [Create reward](#i-example-request-create-reward)
+        - [Create reward](#i-example-request-create-reward)
 
---------
-
-
+---
 
 ## Authorization
 
-
-
 ### 1. Signup
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: POST
@@ -85,38 +79,30 @@ Type: RAW
 URL: {{base_url}}/api/v1/auth/signup
 ```
 
+**_Body:_**
 
-
-***Body:***
-
-```js        
+```js
 {
     "phone": "+12079008514",
     "password": "12341234"
 }
 ```
 
-
-
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 #### I. Example Request: Signup success response
 
+**_Body:_**
 
-
-***Body:***
-
-```js        
+```js
 {
     "phone": "+12079008514",
     "password": "12341234"
 }
 ```
 
-
-
 #### I. Example Response: Signup success response
+
 ```js
 {
     "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjcsInBob25lIjoiKzEyMDc5MDA4NTE0IiwiaWF0IjoxNjQ5MTMxMDM0LCJleHAiOjE2NDkxNTYyMzR9.88yQo3a3gBElOZROW9oJi-I9jGObxqbANqyRXO_jndg",
@@ -124,18 +110,13 @@ URL: {{base_url}}/api/v1/auth/signup
 }
 ```
 
-
-***Status Code:*** 201
+**_Status Code:_** 201
 
 <br>
 
-
-
 ### 2. Signin
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: POST
@@ -143,38 +124,30 @@ Type: RAW
 URL: {{base_url}}/api/v1/auth/signin
 ```
 
+**_Body:_**
 
-
-***Body:***
-
-```js        
+```js
 {
     "phone": "+12079008514",
     "password": "12341234"
 }
 ```
 
-
-
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 #### I. Example Request: Signin
 
+**_Body:_**
 
-
-***Body:***
-
-```js        
+```js
 {
     "phone": "+12079008514",
     "password": "12341234"
 }
 ```
 
-
-
 #### I. Example Response: Signin
+
 ```js
 {
     "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjcsInBob25lIjoiKzEyMDc5MDA4NTE0IiwiaWF0IjoxNjQ5MTMxMjc1LCJleHAiOjE2NDkxNTY0NzV9.kUMpnMGVZv_PiuByCK-B0ApZz1cnqoH4xqXCcghDtB0",
@@ -182,85 +155,63 @@ URL: {{base_url}}/api/v1/auth/signin
 }
 ```
 
-
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
-
-
 ### 3. Logout
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: POST
-Type: 
+Type:
 URL: {{base_url}}/api/v1/auth/logout
 ```
 
-
-
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 #### I. Example Request: Logout
 
-
-
-***Body: None***
-
-
+**_Body: None_**
 
 #### I. Example Response: Logout
+
 ```js
 {
     "message": "success"
 }
 ```
 
-
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
-
-
 ### 4. Refresh token
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: POST
-Type: 
+Type:
 URL: {{base_url}}/api/v1/auth/refresh
 ```
 
-
-
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 #### I. Example Request: Signin
 
+**_Body:_**
 
-
-***Body:***
-
-```js        
+```js
 {
     "email": "test12345@gmail.com",
     "password": "12341234"
 }
 ```
 
-
-
 #### I. Example Response: Signin
+
 ```js
 {
     "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjYsImVtYWlsIjoidGVzdDEyMzQ1QGdtYWlsLmNvbSIsImlhdCI6MTY0OTA4MTg3OCwiZXhwIjoxNjQ5MDgyNzc4fQ.hJ_6XxRwgIHcOLq3bvKNw4QiTqUt_8De8Vo-KaRL41c",
@@ -268,22 +219,15 @@ URL: {{base_url}}/api/v1/auth/refresh
 }
 ```
 
-
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
-
-
 ## Forms
-
-
 
 ### 1. Create form
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: POST
@@ -291,38 +235,30 @@ Type: RAW
 URL: {{base_url}}/api/v1/forms
 ```
 
+**_Body:_**
 
-
-***Body:***
-
-```js        
+```js
 {
     "type": "survey",
     "validity": "2022-04-04T15:11:13.378Z"
 }
 ```
 
-
-
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 #### I. Example Request: Create form
 
+**_Body:_**
 
-
-***Body:***
-
-```js        
+```js
 {
     "type": "survey",
     "validity": "2022-04-04T15:11:13.378Z"
 }
 ```
 
-
-
 #### I. Example Response: Create form
+
 ```js
 {
     "id": 1,
@@ -335,151 +271,112 @@ URL: {{base_url}}/api/v1/forms
 }
 ```
 
-
-***Status Code:*** 201
+**_Status Code:_** 201
 
 <br>
-
-
 
 ### 2. List all forms
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: {{base_url}}/api/v1/forms
 ```
 
-
-
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 #### I. Example Request: List all forms
 
-
-
-***Body: None***
-
-
+**_Body: None_**
 
 #### I. Example Response: List all forms
+
 ```js
 [
     {
-        "id": 1,
-        "createdAt": "2022-04-04T15:11:35.742Z",
-        "updatedAt": "2022-04-04T15:11:35.743Z",
-        "type": "survey",
-        "validity": "2022-04-04T15:11:13.378Z",
-        "rewardId": null,
-        "userId": 6
-    }
-]
+        id: 1,
+        createdAt: '2022-04-04T15:11:35.742Z',
+        updatedAt: '2022-04-04T15:11:35.743Z',
+        type: 'survey',
+        validity: '2022-04-04T15:11:13.378Z',
+        rewardId: null,
+        userId: 6,
+    },
+];
 ```
 
-
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
-
-
 ### 3. Delete form
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: DELETE
-Type: 
+Type:
 URL: {{base_url}}/api/v1/forms/:path
 ```
 
+**_URL variables:_**
 
+| Key  | Value | Description    |
+| ---- | ----- | -------------- |
+| path | 1     | Id of the form |
 
-***URL variables:***
-
-| Key | Value | Description |
-| --- | ------|-------------|
-| path | 1 | Id of the form |
-
-
-
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 #### I. Example Request: Delete form
 
-
-
-***Body: None***
-
-
+**_Body: None_**
 
 #### I. Example Response: Delete form
+
 ```js
 {
     "message": "success"
 }
 ```
 
-
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
-
-
 ### 4. Associate a reward with form
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: PATCH
-Type: 
+Type:
 URL: {{base_url}}/api/v1/forms/:formId/:rewardId
 ```
 
+**_URL variables:_**
 
+| Key      | Value | Description |
+| -------- | ----- | ----------- |
+| formId   | 3     |             |
+| rewardId | 2     |             |
 
-***URL variables:***
-
-| Key | Value | Description |
-| --- | ------|-------------|
-| formId | 3 |  |
-| rewardId | 2 |  |
-
-
-
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 #### I. Example Request: Associate a reward with form
 
+**_Query:_**
 
+| Key      | Value | Description |
+| -------- | ----- | ----------- |
+| formId   | 3     |             |
+| rewardId | 2     |             |
 
-***Query:***
-
-| Key | Value | Description |
-| --- | ------|-------------|
-| formId | 3 |  |
-| rewardId | 2 |  |
-
-
-
-***Body: None***
-
-
+**_Body: None_**
 
 #### I. Example Response: Associate a reward with form
+
 ```js
 {
     "id": 3,
@@ -492,22 +389,15 @@ URL: {{base_url}}/api/v1/forms/:formId/:rewardId
 }
 ```
 
-
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
-
-
 ## Questions
-
-
 
 ### 1. Create question
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: POST
@@ -515,11 +405,9 @@ Type: RAW
 URL: {{base_url}}/api/v1/questions
 ```
 
+**_Body:_**
 
-
-***Body:***
-
-```js        
+```js
 {
     "question": "Which is your favourate colour?",
     "type": "MCQ",
@@ -530,18 +418,13 @@ URL: {{base_url}}/api/v1/questions
 }
 ```
 
-
-
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 #### I. Example Request: Create question
 
+**_Body:_**
 
-
-***Body:***
-
-```js        
+```js
 {
     "question": "Which is your favourate colour?",
     "type": "MCQ",
@@ -552,9 +435,8 @@ URL: {{base_url}}/api/v1/questions
 }
 ```
 
-
-
 #### I. Example Response: Create question
+
 ```js
 {
     "id": 1,
@@ -574,18 +456,13 @@ URL: {{base_url}}/api/v1/questions
 }
 ```
 
-
-***Status Code:*** 201
+**_Status Code:_** 201
 
 <br>
 
-
-
 ### 2. Delete Question
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: DELETE
@@ -593,19 +470,15 @@ Type: RAW
 URL: {{base_url}}/api/v1/questions/:id
 ```
 
+**_URL variables:_**
 
+| Key | Value | Description        |
+| --- | ----- | ------------------ |
+| id  | 1     | Id of the question |
 
-***URL variables:***
+**_Body:_**
 
-| Key | Value | Description |
-| --- | ------|-------------|
-| id | 1 | Id of the question |
-
-
-
-***Body:***
-
-```js        
+```js
 {
     "question": "Which is your favourate colour?",
     "type": "MCQ",
@@ -616,18 +489,13 @@ URL: {{base_url}}/api/v1/questions/:id
 }
 ```
 
-
-
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 #### I. Example Request: Delete Question
 
+**_Body:_**
 
-
-***Body:***
-
-```js        
+```js
 {
     "question": "Which is your favourate colour?",
     "type": "MCQ",
@@ -638,84 +506,65 @@ URL: {{base_url}}/api/v1/questions/:id
 }
 ```
 
-
-
 #### I. Example Response: Delete Question
+
 ```js
 {
     "message": "success"
 }
 ```
 
-
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
-
-
 
 ## Rewards
 
-
-
 ### 1. Get all rewards
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: {{base_url}}/api/v1/rewards
 ```
 
-
-
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 #### I. Example Request: Get all rewards
 
-
-
-***Body: None***
-
-
+**_Body: None_**
 
 #### I. Example Response: Get all rewards
+
 ```js
 [
     {
-        "id": 1,
-        "createdAt": "2022-04-04T17:55:42.840Z",
-        "updatedAt": "2022-04-04T17:55:42.843Z",
-        "name": "reward-name",
-        "type": "voucher",
-        "content": {
-            "key": "value"
+        id: 1,
+        createdAt: '2022-04-04T17:55:42.840Z',
+        updatedAt: '2022-04-04T17:55:42.843Z',
+        name: 'reward-name',
+        type: 'voucher',
+        content: {
+            key: 'value',
         },
-        "validity": "2022-04-04T15:11:13.378Z",
-        "style": {
-            "key": "value"
+        validity: '2022-04-04T15:11:13.378Z',
+        style: {
+            key: 'value',
         },
-        "userId": 6
-    }
-]
+        userId: 6,
+    },
+];
 ```
 
-
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
-
-
 ### 2. Create reward
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: POST
@@ -723,11 +572,9 @@ Type: RAW
 URL: {{base_url}}/api/v1/rewards
 ```
 
+**_Body:_**
 
-
-***Body:***
-
-```js        
+```js
 {
     "name": "reward-name",
     "type": "voucher",
@@ -741,18 +588,13 @@ URL: {{base_url}}/api/v1/rewards
 }
 ```
 
-
-
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 #### I. Example Request: Create reward
 
+**_Body:_**
 
-
-***Body:***
-
-```js        
+```js
 {
     "name": "reward-name",
     "type": "voucher",
@@ -766,9 +608,8 @@ URL: {{base_url}}/api/v1/rewards
 }
 ```
 
-
-
 #### I. Example Response: Create reward
+
 ```js
 {
     "id": 1,
@@ -787,12 +628,10 @@ URL: {{base_url}}/api/v1/rewards
 }
 ```
 
-
-***Status Code:*** 201
+**_Status Code:_** 201
 
 <br>
 
-
-
 ---
+
 [Back to top](#smartlink)

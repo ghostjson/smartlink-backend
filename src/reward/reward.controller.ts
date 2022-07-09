@@ -5,13 +5,13 @@ import { CreateRewardDto } from './dto';
 import { RewardService } from './reward.service';
 
 /**
- * RewardController 
- * 
+ * RewardController
+ *
  * Controller resposible for reward CRUD
  */
 @Controller('/api/v1/rewards')
 export class RewardController {
-    constructor(private rewardService: RewardService) { }
+    constructor(private rewardService: RewardService) {}
 
     /**
      * Get all rewards as response
@@ -20,7 +20,7 @@ export class RewardController {
      */
     @Get('/')
     async getAllRewards(@GetCurrentUserId() userId: number): Promise<Reward[]> {
-        return this.rewardService.getAllRewards(userId)
+        return this.rewardService.getAllRewards(userId);
     }
 
     /**
@@ -31,6 +31,6 @@ export class RewardController {
      */
     @Post('/')
     async createReward(@GetCurrentUserId() userId: number, @Body() createRewardDto: CreateRewardDto): Promise<Reward> {
-        return await this.rewardService.createReward(userId, createRewardDto)
+        return await this.rewardService.createReward(userId, createRewardDto);
     }
 }

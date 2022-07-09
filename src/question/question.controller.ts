@@ -8,13 +8,12 @@ import { QuestionService } from './question.service';
 
 /**
  * QuestionController
- * 
+ *
  * controller responsible for questions CRUD
  */
 @Controller('/api/v1/questions')
 export class QuestionController {
-
-    constructor(private questionService: QuestionService) { }
+    constructor(private questionService: QuestionService) {}
 
     /**
      * add a new question for a form
@@ -24,14 +23,20 @@ export class QuestionController {
      */
     @Post('/')
     @HttpCode(HttpStatus.CREATED)
-    async createQuestion(@GetCurrentUserId() userId: number, @Body() createQuestionDto: CreateQuestionDto): Promise<Question> {
+    async createQuestion(
+        @GetCurrentUserId() userId: number,
+        @Body() createQuestionDto: CreateQuestionDto,
+    ): Promise<Question> {
         return await this.questionService.createQuestion(userId, createQuestionDto);
     }
 
     @Post('/many')
     @HttpCode(HttpStatus.CREATED)
-    async createManyQuestions(@GetCurrentUserId() userId: number, @Body() createManyQuestionsDto: CreateManyQuestionsDto): Promise<any> {
-       return await this.questionService.createManyQuestions(userId, createManyQuestionsDto);
+    async createManyQuestions(
+        @GetCurrentUserId() userId: number,
+        @Body() createManyQuestionsDto: CreateManyQuestionsDto,
+    ): Promise<any> {
+        return await this.questionService.createManyQuestions(userId, createManyQuestionsDto);
     }
 
     /**
@@ -42,10 +47,12 @@ export class QuestionController {
      */
     @Delete('/:questionId')
     @HttpCode(HttpStatus.OK)
-    async deleteQuestion(@GetCurrentUserId() userId: number, @Param('questionId') questionId: number): Promise<SuccessResponse> {
+    async deleteQuestion(
+        @GetCurrentUserId() userId: number,
+        @Param('questionId') questionId: number,
+    ): Promise<SuccessResponse> {
         if (this.questionService.deleteQuestion(userId, Number(questionId))) {
-            return SuccessResponse.put()
+            return SuccessResponse.put();
         }
     }
-
 }

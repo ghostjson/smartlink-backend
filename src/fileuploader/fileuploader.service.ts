@@ -19,15 +19,8 @@ export class FileuploaderService {
 
     // upload file to s3
     async uploadFile(file: Express.Multer.File, userId: number) {
-        const fileName = `${userId}/${Date.now().toString(
-            36,
-        )}.${file.originalname.split('.').pop()}`;
-        return await this.s3Upload(
-            file.buffer,
-            this.AWS_S3_BUCKET,
-            fileName,
-            file.mimetype,
-        );
+        const fileName = `${userId}/${Date.now().toString(36)}.${file.originalname.split('.').pop()}`;
+        return await this.s3Upload(file.buffer, this.AWS_S3_BUCKET, fileName, file.mimetype);
     }
 
     async s3Upload(file, bucket, name, mimetype) {

@@ -40,10 +40,7 @@ export class FormService {
      * @param createFormDto CreateFormDto
      * @returns return newly created form
      */
-    async createFormByUserId(
-        userId: number,
-        createFormDto: CreateFormDto,
-    ): Promise<Form> {
+    async createFormByUserId(userId: number, createFormDto: CreateFormDto): Promise<Form> {
         const form = await this.prisma.form.create({
             data: {
                 type: createFormDto.type,
@@ -101,11 +98,7 @@ export class FormService {
      * @param rewardId id of the reward
      * @returns returns a form object
      */
-    async associateReward(
-        userId: number,
-        formId: number,
-        rewardId: number,
-    ): Promise<Form> {
+    async associateReward(userId: number, formId: number, rewardId: number): Promise<Form> {
         const formExists = await this.prisma.form.count({
             // returns no of form records
             where: {
@@ -124,9 +117,7 @@ export class FormService {
 
         if (formExists === 0 || rewardExists === 0) {
             // returns false if there is no record exists for this user
-            throw new BadRequestException(
-                'Given Form or Reward for the given user does not exists',
-            );
+            throw new BadRequestException('Given Form or Reward for the given user does not exists');
         }
 
         const form = await this.prisma.form.update({
@@ -137,5 +128,34 @@ export class FormService {
         });
 
         return form;
+    }
+
+    /**
+     * Check if the given form is belongs to the given user
+     * @param userId id of the user
+     * @param formId id of the form
+     */
+    async isFormBelongsToUser(userId: number, formId: number) {
+        const formCount = await this.prisma.form.count({
+            where: {
+                id: formId,
+                userId: userId,
+            },
+        });
+
+        return formCount > 0;
+    }
+
+    /**
+     * Check if the form exists
+     * @param formId
+     */
+    async isFormExists(formId: number) {
+        const formCount = await this.prisma.form.count({
+            where: {
+                id: formId,
+            },
+        });
+        return formCount > 0;
     }
 }

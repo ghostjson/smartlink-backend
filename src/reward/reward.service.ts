@@ -5,13 +5,12 @@ import { CreateRewardDto } from './dto';
 
 /**
  * RewardService
- * 
- * Service responsible for handling all business logic related to rewards 
+ *
+ * Service responsible for handling all business logic related to rewards
  */
 @Injectable()
 export class RewardService {
-
-    constructor(private prisma: PrismaService) { }
+    constructor(private prisma: PrismaService) {}
 
     /**
      * Return all rewards of a given user
@@ -20,13 +19,13 @@ export class RewardService {
      */
     async getAllRewards(userId: number): Promise<Reward[]> {
         const rewards = await this.prisma.reward.findMany({
-            where: { userId }
-        })
-        return rewards
+            where: { userId },
+        });
+        return rewards;
     }
 
     /**
-     * create a new reward 
+     * create a new reward
      * @param userId user id of the user
      * @param createRewardDto CreateRewardDto
      * @returns returns newly created reward object
@@ -39,12 +38,10 @@ export class RewardService {
                 content: createRewardDto.content,
                 validity: createRewardDto.validity,
                 style: createRewardDto.style,
-                userId
-            }
-        })
+                userId,
+            },
+        });
 
-        return reward
-
+        return reward;
     }
-
 }

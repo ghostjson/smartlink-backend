@@ -1,10 +1,9 @@
-import { IsNotEmpty, IsObject, IsString } from "class-validator";
+import { IsNotEmpty, IsObject, IsString } from 'class-validator';
 
 /**
  * CreateFormDto
  */
 export class CreateFormDto {
-
     @IsString()
     @IsNotEmpty()
     type: string;
@@ -20,5 +19,4 @@ export class CreateFormDto {
 
     @IsObject()
     metaData: object;
-
 }

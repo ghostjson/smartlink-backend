@@ -5,6 +5,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -42,7 +46,9 @@ model Form {
   metaData Json
 
   questions Question[]
-  reward    Reward?    @relation(fields: [rewardId], references: [id])
+  responses Response[]
+
+  reward Reward? @relation(fields: [rewardId], references: [id])
 
   rewardId Int?  @unique
   User     User? @relation(fields: [userId], references: [id])
@@ -83,4 +89,25 @@ model Reward {
   User   User? @relation(fields: [userId], references: [id])
   userId Int?
   @@map("rewards")
+}
+
+model Response {
+
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name   String
+  number String
+
+  totalScore Int
+
+  answers Json
+  meta    Json
+
+
+  Form   Form? @relation(fields: [formId], references: [id])
+  formId Int?
+
+  @@map("responses")
 }

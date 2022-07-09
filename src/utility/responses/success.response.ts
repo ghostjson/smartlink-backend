@@ -1,6 +1,6 @@
 /**
  * SuccessResponse
- * 
+ *
  * Object used to return success message (used in controllers)
  */
 export class SuccessResponse {
@@ -8,7 +8,7 @@ export class SuccessResponse {
 
     static put() {
         return {
-            message: "success"
-        }
+            message: 'success',
+        };
     }
 }

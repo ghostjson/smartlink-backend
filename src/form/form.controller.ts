@@ -1,14 +1,4 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    HttpCode,
-    HttpStatus,
-    Param,
-    Patch,
-    Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
 import { Form } from '@prisma/client';
 import { GetCurrentUserId, Public } from 'src/decorators';
 import { SuccessResponse } from 'src/utility/responses';
@@ -57,10 +47,7 @@ export class FormController {
      */
     @Post('/')
     @HttpCode(HttpStatus.CREATED)
-    async createForm(
-        @GetCurrentUserId() userId: number,
-        @Body() createFormDto: CreateFormDto,
-    ) {
+    async createForm(@GetCurrentUserId() userId: number, @Body() createFormDto: CreateFormDto) {
         return this.formService.createFormByUserId(userId, createFormDto);
     }
 
@@ -72,10 +59,7 @@ export class FormController {
      */
     @Delete('/:formId')
     @HttpCode(HttpStatus.OK)
-    async deleteForm(
-        @GetCurrentUserId() userId: number,
-        @Param('formId') formId: number,
-    ): Promise<SuccessResponse> {
+    async deleteForm(@GetCurrentUserId() userId: number, @Param('formId') formId: number): Promise<SuccessResponse> {
         await this.formService.deleteFormByUserId(userId, Number(formId));
         return SuccessResponse.put();
     }
@@ -93,11 +77,7 @@ export class FormController {
         @Param('formId') formId: string,
         @Param('rewardId') rewardId: string,
     ): Promise<Form> {
-        const form: Form = await this.formService.associateReward(
-            Number(userId),
-            Number(formId),
-            Number(rewardId),
-        );
+        const form: Form = await this.formService.associateReward(Number(userId), Number(formId), Number(rewardId));
         return form;
     }
 }

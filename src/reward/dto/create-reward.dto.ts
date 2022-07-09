@@ -1,10 +1,9 @@
-import { IsDate, IsNotEmpty, IsObject, IsString } from "class-validator";
+import { IsDate, IsNotEmpty, IsObject, IsString } from 'class-validator';
 
 /**
  * CreateRewardDto
  */
 export class CreateRewardDto {
-
     @IsString()
     @IsNotEmpty()
     name: string;
@@ -21,5 +20,4 @@ export class CreateRewardDto {
 
     @IsObject()
     style: object;
-
 }

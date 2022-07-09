@@ -1,10 +1,9 @@
-import { IsNotEmpty, isNotEmpty, IsNumber, IsObject, IsString, isString } from "class-validator";
+import { IsNotEmpty, isNotEmpty, IsNumber, IsObject, IsString, isString } from 'class-validator';
 
 /**
  * CreateQuestionDto
  */
 export class CreateQuestionDto {
-
     @IsString()
     @IsNotEmpty()
     question: string;
@@ -19,5 +18,4 @@ export class CreateQuestionDto {
     @IsNumber()
     @IsNotEmpty()
     formId: number;
-
 }
