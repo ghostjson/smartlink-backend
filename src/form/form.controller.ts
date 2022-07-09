@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    HttpStatus,
+    NotFoundException,
+    Param,
+    Patch,
+    Post,
+} from '@nestjs/common';
 import { Form } from '@prisma/client';
 import { GetCurrentUserId, Public } from 'src/decorators';
 import { SuccessResponse } from 'src/utility/responses';
@@ -36,7 +47,11 @@ export class FormController {
     @Get('/:formId')
     @HttpCode(HttpStatus.OK)
     async getFormById(@Param('formId') formId: number) {
-        return this.formService.getFormById(Number(formId));
+        if (await this.formService.isFormExists(Number(formId))) {
+            return this.formService.getFormById(Number(formId));
+        } else {
+            throw new NotFoundException('Form not exists');
+        }
     }
 
     /**
