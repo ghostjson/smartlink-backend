@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { Reward } from '@prisma/client';
 import { GetCurrentUserId } from 'src/decorators';
+import { SuccessResponse } from 'src/utility/responses';
 import { CreateRewardDto } from './dto';
 import { RewardService } from './reward.service';
 
@@ -31,6 +32,25 @@ export class RewardController {
      */
     @Post('/')
     async createReward(@GetCurrentUserId() userId: number, @Body() createRewardDto: CreateRewardDto): Promise<Reward> {
+        // limit the coupons generated to 1000 for safety
+        if (createRewardDto.count > 1000) {
+            throw new BadRequestException('Current limit of vouchers created for a reward is 1000');
+        }
+
         return await this.rewardService.createReward(userId, createRewardDto);
+    }
+
+    /**
+     * Redeem the given code
+     * @param userId id of the user
+     * @param voucherCode voucher code to be redeem
+     * @returns
+     */
+    @Post('/:voucherCode')
+    async redeemReward(@GetCurrentUserId() userId: number, @Param('voucherCode') voucherCode: string) {
+        // TODO: currently any logged in user can redeem any code
+        if (this.rewardService.redeemReward(voucherCode)) {
+            return new SuccessResponse();
+        }
     }
 }

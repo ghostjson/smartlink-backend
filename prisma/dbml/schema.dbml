@@ -50,10 +50,12 @@ Table rewards {
   type String [not null]
   content Json [not null]
   validity DateTime [not null]
+  count Int [not null, default: 0]
   style Json [not null]
   Form forms
   User users
   userId Int
+  redemptions redemptions [not null]
 }
 
 Table responses {
@@ -69,6 +71,15 @@ Table responses {
   formId Int
 }
 
+Table redemptions {
+  id Int [pk, increment]
+  code String [unique, not null]
+  rewardId Int [not null]
+  isPublished Boolean [not null]
+  isProcessed Boolean [not null]
+  reward rewards
+}
+
 Ref: forms.rewardId - rewards.id
 
 Ref: forms.userId > users.id
@@ -78,3 +89,5 @@ Ref: questions.formId > forms.id
 Ref: rewards.userId > users.id
 
 Ref: responses.formId > forms.id
+
+Ref: redemptions.rewardId > rewards.id

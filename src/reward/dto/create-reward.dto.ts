@@ -1,4 +1,4 @@
-import { IsDate, IsNotEmpty, IsObject, IsString } from 'class-validator';
+import { IsDate, IsNotEmpty, IsNumber, IsObject, IsString } from 'class-validator';
 
 /**
  * CreateRewardDto
@@ -20,4 +20,7 @@ export class CreateRewardDto {
 
     @IsObject()
     style: object;
+
+    @IsNumber()
+    count: number;
 }

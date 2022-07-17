@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { RewardService } from 'src/reward/reward.service';
 import { CreateResponseDto } from './dto';
 
 @Injectable()
 export class ResponseService {
-    constructor(private prisma: PrismaService) {}
+    constructor(private prisma: PrismaService, private rewardService: RewardService) {}
 
     /**
      * Get response of a specific form
@@ -31,6 +32,15 @@ export class ResponseService {
      * @returns created form response
      */
     async createResponseForForm(formId: number, createResponseDto: CreateResponseDto) {
+        const form = await this.prisma.form.findFirst({
+            where: {
+                id: formId,
+            },
+            include: {
+                reward: true,
+            },
+        });
+
         const response = await this.prisma.response.create({
             data: {
                 formId: formId,
@@ -41,6 +51,13 @@ export class ResponseService {
                 totalScore: createResponseDto.totalScore,
             },
         });
+
+        if (form.reward) {
+            const voucher = await this.rewardService.getUnallocatedReward(form.rewardId);
+            this.rewardService.publishRedemption(voucher.id);
+
+            response['voucherCode'] = voucher.code;
+        }
 
         return response;
     }

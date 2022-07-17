@@ -82,12 +82,14 @@ model Reward {
   content Json
 
   validity DateTime
+  count    Int      @default(0)
 
   style Json
 
-  Form   Form?
-  User   User? @relation(fields: [userId], references: [id])
-  userId Int?
+  Form        Form?
+  User        User?        @relation(fields: [userId], references: [id])
+  userId      Int?
+  redemptions Redemption[]
   @@map("rewards")
 }
 
@@ -110,4 +112,17 @@ model Response {
   formId Int?
 
   @@map("responses")
+}
+
+model Redemption {
+  id   Int    @id @default(autoincrement())
+  code String @unique
+
+  rewardId Int
+
+  isPublished Boolean
+  isProcessed Boolean
+
+  reward Reward? @relation(fields: [rewardId], references: [id])
+  @@map("redemptions")
 }
