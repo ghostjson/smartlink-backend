@@ -134,9 +134,7 @@ export class RewardService {
             },
         });
 
-        if (redeem <= 0) {
-            throw new BadRequestException('The given voucher not existed');
-        } else {
+        if (redeem > 0) {
             await this.prisma.redemption.update({
                 where: {
                     code: voucherCode,
@@ -145,8 +143,9 @@ export class RewardService {
                     isProcessed: true,
                 },
             });
+            return true;
         }
 
-        return true;
+        return false;
     }
 }

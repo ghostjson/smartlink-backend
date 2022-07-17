@@ -1,6 +1,17 @@
-import { BadRequestException, Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+    BadGatewayException,
+    BadRequestException,
+    Body,
+    Controller,
+    ForbiddenException,
+    Get,
+    NotFoundException,
+    Param,
+    Post,
+    Put,
+} from '@nestjs/common';
 import { Reward } from '@prisma/client';
-import { GetCurrentUserId } from 'src/decorators';
+import { GetCurrentUserId, Public } from 'src/decorators';
 import { SuccessResponse } from 'src/utility/responses';
 import { CreateRewardDto } from './dto';
 import { RewardService } from './reward.service';
@@ -46,11 +57,34 @@ export class RewardController {
      * @param voucherCode voucher code to be redeem
      * @returns
      */
-    @Post('/:voucherCode')
+    @Post('/redeem/:voucherCode')
     async redeemReward(@GetCurrentUserId() userId: number, @Param('voucherCode') voucherCode: string) {
         // TODO: currently any logged in user can redeem any code
-        if (this.rewardService.redeemReward(voucherCode)) {
-            return new SuccessResponse();
+        if (await this.rewardService.redeemReward(voucherCode)) {
+            return SuccessResponse.put();
+        } else {
+            throw new NotFoundException('This voucher code not existed or not existing anymore');
+        }
+    }
+
+    /**
+     * Get a specfic reward by id
+     * @param rewardId id of the reward
+     * @returns returns reward
+     */
+    @Public()
+    @Get('/:id')
+    async getReward(@Param('id') rewardId: number) {
+        const reward = await this.rewardService.getReward(Number(rewardId));
+
+        if (reward) {
+            if (reward.count <= 0) {
+                throw new BadRequestException('There is no voucher code exists for this reward');
+            }
+
+            return reward;
+        } else {
+            throw new NotFoundException('Reward is not found');
         }
     }
 }
