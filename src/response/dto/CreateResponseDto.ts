@@ -1,9 +1,9 @@
-import { IsNotEmpty, IsNumber, IsObject, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, IsObject, IsString } from 'class-validator';
 
 export class CreateResponseDto {
-    @IsObject()
+    @IsArray()
     @IsNotEmpty()
-    answers: object;
+    answers: any;
 
     @IsString()
     name: string;

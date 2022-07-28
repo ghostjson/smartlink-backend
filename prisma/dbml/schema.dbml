@@ -29,6 +29,7 @@ Table forms {
   rewardId Int [unique]
   User users
   userId Int
+  Answers answers [not null]
 }
 
 Table questions {
@@ -38,6 +39,7 @@ Table questions {
   question String [not null]
   type String [not null]
   content Json [not null]
+  answers answers [not null]
   Form forms
   formId Int
 }
@@ -65,8 +67,21 @@ Table responses {
   name String [not null]
   number String [not null]
   totalScore Int [not null]
-  answers Json [not null]
+  answers answers [not null]
   meta Json [not null]
+  Form forms
+  formId Int
+}
+
+Table answers {
+  id Int [pk, increment]
+  answer String [not null]
+  score String
+  meta Json
+  Question questions
+  questionId Int [not null]
+  Response responses
+  responseId Int
   Form forms
   formId Int
 }
@@ -89,5 +104,11 @@ Ref: questions.formId > forms.id
 Ref: rewards.userId > users.id
 
 Ref: responses.formId > forms.id
+
+Ref: answers.questionId > questions.id
+
+Ref: answers.responseId > responses.id
+
+Ref: answers.formId > forms.id
 
 Ref: redemptions.rewardId > rewards.id

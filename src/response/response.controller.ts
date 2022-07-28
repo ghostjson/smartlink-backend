@@ -39,4 +39,42 @@ export class ResponseController {
             throw new NotFoundException('Form not exists');
         }
     }
+
+    /**
+     * Get all answers of a specific response
+     * @param userId id of the user
+     * @param formId form id of the user
+     * @param responseId response id of the response
+     * @returns returns all answers
+     */
+    @Get(':formId/answers/:responseId')
+    @HttpCode(HttpStatus.OK)
+    async getAllAnswersOfResponse(
+        @GetCurrentUserId() userId: number,
+        @Param('formId') formId: number,
+        @Param('responseId') responseId: number,
+    ) {
+        if (await this.formService.isFormBelongsToUser(Number(userId), Number(formId))) {
+            //TODO: Double check logic, not checking the response belongs to the user (security fault)
+            return this.responseService.getAllAnswersOfResponse(Number(responseId));
+        } else {
+            throw new NotFoundException();
+        }
+    }
+
+    /**
+     * Get stats of a response
+     * @param userId id of the user
+     * @param formId form id
+     * @returns answer stats
+     */
+    @Get('/:formId/stats')
+    async getStatsOfAnswers(@GetCurrentUserId() userId: number, @Param('formId') formId: number) {
+        if (await this.formService.isFormBelongsToUser(Number(userId), Number(formId))) {
+            //TODO: Double check logic, not checking the response belongs to the user (security fault)
+            return this.responseService.getStatsOfResponse(Number(formId));
+        } else {
+            throw new NotFoundException();
+        }
+    }
 }
