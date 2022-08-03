@@ -67,7 +67,7 @@ export class ResponseService {
 
         // if the form contain reward add voucher to the form
         if (form.reward) {
-            const voucher = await this.rewardService.getUnallocatedReward(form.rewardId);
+            const voucher = await this.rewardService.getUnallocatedReward(form.rewardId, createResponseDto.number);
             this.rewardService.publishRedemption(voucher.id);
 
             response['voucherCode'] = voucher.code;

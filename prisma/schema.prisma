@@ -135,8 +135,9 @@ model Answers {
 }
 
 model Redemption {
-  id   Int    @id @default(autoincrement())
-  code String @unique
+  id    Int     @id @default(autoincrement())
+  code  String  @unique
+  phone String?
 
   rewardId Int
 

@@ -106,17 +106,27 @@ export class RewardService {
      * @param rewardId id of the reward
      * @returns
      */
-    async getUnallocatedReward(rewardId: number) {
+    async getUnallocatedReward(rewardId: number, phone: string) {
         const reward = await this.getReward(rewardId);
 
         if (reward.count <= 0) {
             throw new ForbiddenException('No vouchers available for this reward');
         }
 
-        return await this.prisma.redemption.findFirst({
+        const redemption = await this.prisma.redemption.findFirst({
             where: {
                 rewardId: rewardId,
                 isPublished: false,
+            },
+        });
+
+        // update phone number in the database
+        return await this.prisma.redemption.update({
+            where: {
+                id: redemption.id,
+            },
+            data: {
+                phone: phone,
             },
         });
     }

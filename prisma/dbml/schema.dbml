@@ -89,6 +89,7 @@ Table answers {
 Table redemptions {
   id Int [pk, increment]
   code String [unique, not null]
+  phone String
   rewardId Int [not null]
   isPublished Boolean [not null]
   isProcessed Boolean [not null]
