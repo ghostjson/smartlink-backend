@@ -13,7 +13,7 @@ import {
 import { Reward } from '@prisma/client';
 import { GetCurrentUserId, Public } from 'src/decorators';
 import { SuccessResponse } from 'src/utility/responses';
-import { CreateRewardDto } from './dto';
+import { CreateRewardDto, RedeemDto } from './dto';
 import { RewardService } from './reward.service';
 
 /**
@@ -58,9 +58,13 @@ export class RewardController {
      * @returns
      */
     @Post('/redeem/:voucherCode')
-    async redeemReward(@GetCurrentUserId() userId: number, @Param('voucherCode') voucherCode: string) {
+    async redeemReward(
+        @GetCurrentUserId() userId: number,
+        @Param('voucherCode') voucherCode: string,
+        @Body() redeemDto: RedeemDto,
+    ) {
         // TODO: currently any logged in user can redeem any code
-        if (await this.rewardService.redeemReward(voucherCode)) {
+        if (await this.rewardService.redeemReward(voucherCode, redeemDto.phone)) {
             return SuccessResponse.put();
         } else {
             throw new NotFoundException('This voucher code not existed or not existing anymore');

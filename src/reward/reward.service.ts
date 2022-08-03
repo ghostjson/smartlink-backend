@@ -135,12 +135,13 @@ export class RewardService {
      * Radeem reward
      * @param voucherCode
      */
-    async redeemReward(voucherCode: string) {
+    async redeemReward(voucherCode: string, phone: string) {
         const redeem = await this.prisma.redemption.count({
             where: {
                 code: voucherCode,
                 isProcessed: false,
                 isPublished: true,
+                phone: phone,
             },
         });
 

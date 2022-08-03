@@ -70,27 +70,33 @@ export class AuthService {
      */
     async signinUsingFacebook(facebookSigninDto: FacebookSigninDto): Promise<Token> {
         const fbToken = facebookSigninDto.accessToken;
-        const response = await axios.post(`https://graph.facebook.com/me?fields=name,picture&access_token=${fbToken}`);
         let user = null;
-        console.log(response);
+        try {
+            const response = await axios.post(
+                `https://graph.facebook.com/me?fields=name,picture&access_token=${fbToken}`,
+            );
 
-        // check if the user already exists
-        if (await this.isUserExists(response.data.id)) {
-            // if exist query it from the database
-            user = await this.prisma.user.findUnique({
-                where: {
-                    facebookId: response.data.id,
-                },
-            });
-        } else {
-            // if not exist, create a new user
-            user = await this.prisma.user.create({
-                data: {
-                    name: response.data.name,
-                    facebookId: response.data.id,
-                    profile: response.data.picture.data.url,
-                },
-            });
+            // check if the user already exists
+            if (await this.isUserExists(response.data.id)) {
+                // if exist query it from the database
+                user = await this.prisma.user.findUnique({
+                    where: {
+                        facebookId: response.data.id,
+                    },
+                });
+            } else {
+                // if not exist, create a new user
+                user = await this.prisma.user.create({
+                    data: {
+                        name: response.data.name,
+                        facebookId: response.data.id,
+                        profile: response.data.picture.data.url,
+                    },
+                });
+            }
+        } catch (err) {
+            console.log(err);
+            throw new UnauthorizedException();
         }
 
         const token = await this.generateTokens(user.id, user.facebookId);
