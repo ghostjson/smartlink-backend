@@ -31,12 +31,11 @@ export class FileuploaderController {
     async uploadFile(@GetCurrentUserId() userId: number, @UploadedFile() file: Express.Multer.File) {
         // check if the file is image or not
         if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg') {
-            const s3File = await this.fileUploaderService.uploadFile(file, userId);
-
-            if (file.size > 5000 * 10000) {
-                throw new BadRequestException('file size should be less than 4mb');
+            if (file.size > 2000 * 1000) {
+                throw new BadRequestException('file size should be less than 2mb');
             }
 
+            const s3File = await this.fileUploaderService.uploadFile(file, userId);
             return {
                 location: s3File.Location,
             };
