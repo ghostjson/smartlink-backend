@@ -26,7 +26,7 @@ export class AuthController {
     @Post('/signup')
     @HttpCode(HttpStatus.CREATED)
     async signup(@Body() signupDto: SignupDto): Promise<Token> {
-        if (await this.authService.isUserExists(signupDto.phone)) {
+        if (await this.authService.isUserExists(signupDto.email)) {
             throw new ConflictException('User already exists');
         }
 

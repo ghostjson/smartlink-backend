@@ -20,7 +20,8 @@ model User {
   updatedAt DateTime @updatedAt
 
   // phone        String  @unique
-  // password     String
+  email      String? @unique
+  password   String?
   name       String?
   profile    String?
   facebookId String? @unique
