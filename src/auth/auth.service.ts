@@ -52,14 +52,13 @@ export class AuthService {
             },
         });
 
-        if (bcrypt.compare(signinDto.password, user.password)) {
+        if (await bcrypt.compare(signinDto.password, user.password)) {
             const tokens = await this.generateTokens(user.id, user.email);
             await this.updateRefreshTokenHash(user.id, tokens.refreshToken);
             return tokens;
         } else {
             throw new UnauthorizedException('Incorrect credentials');
         }
-        return null;
     }
 
     /**

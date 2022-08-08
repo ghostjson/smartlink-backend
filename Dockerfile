@@ -9,4 +9,6 @@ RUN npm install
 
 RUN npm run build
 
-CMD [ "npm", "run", "start:prod"]
+RUN npm install pm2 --location=global
+
+CMD ["pm2", "dist/main.js"]
