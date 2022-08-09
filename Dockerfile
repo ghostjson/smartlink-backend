@@ -9,6 +9,4 @@ RUN npm install
 
 RUN npm run build
 
-RUN npm install pm2 --location=global
-
-CMD ["pm2", "dist/main.js"]
+CMD ["node", "dist/main.js"]
