@@ -72,6 +72,13 @@ export class AuthController {
         return SuccessResponse.put();
     }
 
+    @Post('/check')
+    @HttpCode(HttpStatus.OK)
+    async checkAccessToken(@GetCurrentUserId() userId: number) {
+        console.log(userId);
+        return SuccessResponse.put();
+    }
+
     /**
      * Refresh token
      * @deprecated
